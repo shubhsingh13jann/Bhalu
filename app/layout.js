@@ -21,7 +21,7 @@ const lato = Lato({
 
 export const metadata = {
   title: 'Happy Birthday Bhalu 🌸',
-  description: 'A special birthday celebration for my dearest little sister',
+  description: 'A special 19th birthday celebration for my dearest little sister',
 }
 
 export default function RootLayout({ children }) {

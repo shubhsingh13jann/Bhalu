@@ -120,7 +120,7 @@ const WISHES = [
   {
     icon: '✨',
     title: 'A Brilliant Future',
-    text: 'As you step into your twenties, may every path ahead shine brilliant and golden. The world is wide and waiting — the greatest chapters of your story have only just begun.',
+    text: 'As you step into your nineteenth year, may every path ahead shine brilliant and golden. The world is wide and waiting — the greatest chapters of your story have only just begun.',
     delay: '0.5s',
   },
   {
@@ -132,7 +132,7 @@ const WISHES = [
   {
     icon: '🦋',
     title: 'Beautiful Growth',
-    text: 'Twenty years of becoming someone truly extraordinary. Your metamorphosis is a marvel to witness — and the most breathtaking version of you is still unfolding.',
+    text: 'Nineteen years of becoming someone truly extraordinary. Your metamorphosis is a marvel to witness — and the most breathtaking version of you is still unfolding.',
     delay: '1.5s',
   },
   {
@@ -179,7 +179,10 @@ export default function BirthdayPage() {
   const canvasRef  = useRef(null)
   const petalsRef  = useRef(null)
   const rafRef     = useRef(null)
+  const openTimerRef = useRef(null)
   const [ready, setReady] = useState(false)
+  const [promiseAccepted, setPromiseAccepted] = useState(false)
+  const [openingEnvelope, setOpeningEnvelope] = useState(false)
 
   /* ── Canvas sparkles ── */
   useEffect(() => {
@@ -315,7 +318,27 @@ export default function BirthdayPage() {
   /* ── Mount fade-in ── */
   useEffect(() => { const t = setTimeout(() => setReady(true), 80); return () => clearTimeout(t) }, [])
 
+  /* ── Lock page until promise ── */
+  useEffect(() => {
+    document.body.style.overflow = promiseAccepted ? '' : 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [promiseAccepted])
+
+  useEffect(() => {
+    return () => {
+      if (openTimerRef.current) clearTimeout(openTimerRef.current)
+    }
+  }, [])
+
   /* ──────────────────────────────────────────── */
+
+  const handlePromise = () => {
+    if (openingEnvelope) return
+    setOpeningEnvelope(true)
+    openTimerRef.current = setTimeout(() => {
+      setPromiseAccepted(true)
+    }, 1600)
+  }
 
   const confetti = Array.from({ length: 26 }, (_, i) => {
     const angle   = (i / 26) * Math.PI * 2
@@ -337,6 +360,38 @@ export default function BirthdayPage() {
 
   return (
     <>
+      {!promiseAccepted && (
+        <section className={`promise-screen ${openingEnvelope ? 'opened' : ''}`}>
+          <div className="promise-stars" aria-hidden="true" />
+          <div className="promise-aura promise-aura-left" aria-hidden="true" />
+          <div className="promise-aura promise-aura-right" aria-hidden="true" />
+
+          <div className="promise-envelope-wrap">
+            <div className="promise-envelope-shadow" aria-hidden="true" />
+            <div className="promise-envelope">
+              <div className="promise-envelope-top" aria-hidden="true" />
+              <div className="promise-envelope-letter">
+                <p className="promise-kicker">Ek Chhota Sa Promise Pehle</p>
+                <h2 className="promise-title">First promise me ki hamesha khush rahogi</h2>
+                <p className="promise-text">
+                  Bas itna sa vaada chahiye, ki chahe din kaise bhi ho, tum apni smile kabhi khona mat.
+                  Aaj ka yeh surprise tabhi khulega jab tum yeh promise karogi.
+                </p>
+
+                <div className="promise-seal-row">
+                  <span className="promise-seal-flower">🌸</span>
+                  <button type="button" className="promise-button" onClick={handlePromise}>
+                    Promise Karo
+                  </button>
+                  <span className="promise-seal-flower">🌸</span>
+                </div>
+              </div>
+              <div className="promise-envelope-body" aria-hidden="true" />
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Fixed sparkle layer */}
       <canvas ref={canvasRef} className="sparkle-canvas" />
 
@@ -345,7 +400,7 @@ export default function BirthdayPage() {
 
       <main
         className="page-wrapper"
-        style={{ opacity: ready ? 1 : 0, transition: 'opacity 0.8s ease' }}
+        style={{ opacity: ready && promiseAccepted ? 1 : 0, transition: 'opacity 1s ease' }}
       >
 
         {/* ══════ HERO ══════ */}
@@ -401,7 +456,7 @@ export default function BirthdayPage() {
             <p className="age-label">Years of Being Absolutely Magical</p>
 
             <p className="hero-tagline">
-              Twenty years of sunshine, wonder &amp; boundless love 🌺
+              Nineteen years of sunshine, wonder &amp; boundless love 🌺
             </p>
 
             <a href="#garden" className="scroll-btn">
@@ -535,12 +590,12 @@ export default function BirthdayPage() {
             </div>
 
             <div className="letter-box">
-              <p className="letter-tag">A Message From The Heart</p>
-              <h2 className="letter-heading">To My Dearest Little Sister</h2>
+              <p className="letter-tag">❤️A Message From The Heart❤️</p>
+              <h2 className="letter-heading">For my one and only Cutii Chotii Bhalu 🐻💕🥰</h2>
 
               <div className="letter-body">
                 <p>
-                  Twenty years ago, the world became a more beautiful place — not because of any grand
+                  Nineteen years ago, the world became a more beautiful place — not because of any grand
                   event, but simply because <em>you</em> arrived in it. And from that very first moment,
                   everything has been brighter.
                 </p>
@@ -557,7 +612,7 @@ export default function BirthdayPage() {
                   everyone who knows you.
                 </p>
                 <p>
-                  On this beautiful day, as you turn twenty, I want you to hear this clearly:
+                  On this beautiful day, as you turn nineteen, I want you to hear this clearly:
                   <strong> the world is entirely, completely, infinitely yours.</strong> Dream without
                   ceilings. Love without conditions. Dance in the rain. Chase every sunrise. Be bold,
                   be joyful, be unapologetically yourself.
@@ -572,8 +627,8 @@ export default function BirthdayPage() {
               </div>
 
               <div className="letter-sig">
-                <p>With all my love, always and forever,</p>
-                <p className="letter-sig-name">Your Bhai / Didi 💕</p>
+                <p>Apna special day bahut achhe se enjoy karna aur hanesha 😊 karna thik hai .</p>
+                <p className="letter-sig-name">Tumhara Chota as Bhai 💕</p>
               </div>
             </div>
 
@@ -621,7 +676,7 @@ export default function BirthdayPage() {
           <div className="reveal" style={{ transitionDelay: '0.2s' }}>
             <span className="celebration-crown">👑</span>
             <h2 className="celebration-title">Here&apos;s To You!</h2>
-            <p className="celebration-sub">20 &amp; Fabulous 🌟</p>
+            <p className="celebration-sub">19 &amp; Fabulous 🌟</p>
           </div>
 
           <p className="celebration-msg reveal" style={{ transitionDelay: '0.4s' }}>
@@ -683,7 +738,7 @@ export default function BirthdayPage() {
         <footer className="footer">
           <span className="footer-flowers">🌸 🌺 🌹 🪷 💐 🌷</span>
           <p className="footer-main">Made with infinite love for the most special girl in the world</p>
-          <p className="footer-sub">Happy 20th Birthday, Bhalu &nbsp;·&nbsp; You are so deeply loved ✨</p>
+          <p className="footer-sub">Happy 19th Birthday, Bhalu &nbsp;·&nbsp; You are so deeply loved ✨</p>
         </footer>
 
       </main>

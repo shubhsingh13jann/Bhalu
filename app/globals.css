@@ -220,6 +220,31 @@ body {
   }
 }
 
+@keyframes promiseTwinkle {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.08); }
+}
+
+@keyframes promiseLift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes promiseUnseal {
+  0% { transform: rotateX(0deg); }
+  100% { transform: rotateX(-175deg); }
+}
+
+@keyframes promiseLetterRise {
+  0% { transform: translateY(0) scale(0.92); opacity: 0.92; }
+  50% { transform: translateY(-26px) scale(1); opacity: 1; }
+  100% { transform: translateY(-140px) scale(1.03); opacity: 0; }
+}
+
+@keyframes promiseFadeAway {
+  to { opacity: 0; visibility: hidden; }
+}
+
 /* ========== UTILITY ========== */
 
 .gradient-text {
@@ -266,6 +291,249 @@ body {
 .page-wrapper {
   position: relative;
   z-index: 5;
+}
+
+/* ========== PROMISE OPENING ========== */
+
+.promise-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 215, 0, 0.12), transparent 28%),
+    radial-gradient(circle at 80% 25%, rgba(255, 92, 154, 0.18), transparent 30%),
+    radial-gradient(circle at 50% 75%, rgba(192, 96, 240, 0.18), transparent 38%),
+    linear-gradient(145deg, #03000b 0%, #120022 45%, #22003f 100%);
+}
+
+.promise-screen.opened {
+  animation: promiseFadeAway 1.2s ease 0.45s forwards;
+}
+
+.promise-stars {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 12% 22%, rgba(255,255,255,0.9) 0 2px, transparent 3px),
+    radial-gradient(circle at 22% 70%, rgba(255,215,0,0.8) 0 2px, transparent 3px),
+    radial-gradient(circle at 37% 16%, rgba(255,179,217,0.8) 0 1.5px, transparent 3px),
+    radial-gradient(circle at 52% 28%, rgba(255,255,255,0.85) 0 1.5px, transparent 3px),
+    radial-gradient(circle at 63% 72%, rgba(224,176,255,0.9) 0 2px, transparent 3px),
+    radial-gradient(circle at 77% 18%, rgba(255,215,0,0.7) 0 1.5px, transparent 3px),
+    radial-gradient(circle at 84% 58%, rgba(255,255,255,0.8) 0 2px, transparent 3px),
+    radial-gradient(circle at 92% 34%, rgba(255,128,192,0.8) 0 1.5px, transparent 3px);
+  animation: promiseTwinkle 4s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+.promise-aura {
+  position: absolute;
+  width: 32rem;
+  height: 32rem;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.32;
+}
+
+.promise-aura-left {
+  left: -8rem;
+  top: 10%;
+  background: radial-gradient(circle, rgba(255, 92, 154, 0.75), transparent 65%);
+}
+
+.promise-aura-right {
+  right: -8rem;
+  bottom: 8%;
+  background: radial-gradient(circle, rgba(192, 96, 240, 0.8), transparent 65%);
+}
+
+.promise-envelope-wrap {
+  position: relative;
+  width: min(92vw, 660px);
+  animation: promiseLift 5s ease-in-out infinite;
+}
+
+.promise-envelope-shadow {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: -2rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.55), transparent 70%);
+  filter: blur(8px);
+}
+
+.promise-envelope {
+  position: relative;
+  height: min(76vw, 420px);
+  max-height: 420px;
+  min-height: 340px;
+  perspective: 1600px;
+}
+
+.promise-envelope-body,
+.promise-envelope-top {
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+}
+
+.promise-envelope-body {
+  background:
+    linear-gradient(135deg, rgba(255, 240, 246, 0.98), rgba(255, 226, 238, 0.94)),
+    linear-gradient(135deg, rgba(255, 92, 154, 0.2), rgba(192, 96, 240, 0.18));
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.38),
+    0 0 0 1px rgba(255, 255, 255, 0.6) inset,
+    0 0 40px rgba(255, 92, 154, 0.16);
+  clip-path: polygon(0 26%, 50% 60%, 100% 26%, 100% 100%, 0 100%);
+}
+
+.promise-envelope-body::before,
+.promise-envelope-body::after {
+  content: '';
+  position: absolute;
+  top: 24%;
+  bottom: 0;
+  width: 52%;
+  background: linear-gradient(145deg, rgba(255,255,255,0.25), rgba(255,92,154,0.1));
+}
+
+.promise-envelope-body::before {
+  left: 0;
+  clip-path: polygon(0 0, 100% 40%, 100% 100%, 0 100%);
+}
+
+.promise-envelope-body::after {
+  right: 0;
+  clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 100%);
+}
+
+.promise-envelope-top {
+  top: 0;
+  height: 55%;
+  transform-origin: top center;
+  background: linear-gradient(160deg, #ffdbe8, #ffbad3 65%, #f08ab7 100%);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+  z-index: 3;
+}
+
+.promise-screen.opened .promise-envelope-top {
+  animation: promiseUnseal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.promise-envelope-letter {
+  position: absolute;
+  left: 50%;
+  top: 12%;
+  width: min(86%, 520px);
+  padding: clamp(1.4rem, 3vw, 2rem);
+  border-radius: 26px;
+  transform: translateX(-50%);
+  background:
+    linear-gradient(180deg, rgba(255, 251, 244, 0.98), rgba(255, 242, 234, 0.94));
+  color: #622246;
+  text-align: center;
+  box-shadow:
+    0 18px 50px rgba(90, 20, 60, 0.18),
+    inset 0 0 0 1px rgba(255, 176, 210, 0.45);
+  z-index: 2;
+}
+
+.promise-envelope-letter::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at top right, rgba(255, 215, 0, 0.18), transparent 25%),
+    radial-gradient(circle at bottom left, rgba(255, 92, 154, 0.1), transparent 28%);
+  pointer-events: none;
+}
+
+.promise-screen.opened .promise-envelope-letter {
+  animation: promiseLetterRise 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.promise-kicker {
+  position: relative;
+  z-index: 1;
+  font-size: 0.82rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #b5477c;
+  margin-bottom: 1rem;
+}
+
+.promise-title {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display), serif;
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  line-height: 1.08;
+  color: #8f1f5f;
+  margin-bottom: 1rem;
+  text-shadow: 0 8px 26px rgba(255, 92, 154, 0.18);
+}
+
+.promise-text {
+  position: relative;
+  z-index: 1;
+  max-width: 28rem;
+  margin: 0 auto 1.4rem;
+  font-size: clamp(0.98rem, 1.7vw, 1.1rem);
+  line-height: 1.85;
+  color: #784260;
+}
+
+.promise-seal-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.promise-seal-flower {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 14px rgba(255, 92, 154, 0.35));
+}
+
+.promise-button {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.95rem 1.8rem;
+  background: linear-gradient(135deg, #ff5c9a, #c060f0, #ffd700);
+  background-size: 200% auto;
+  color: #fffdf7;
+  font-family: var(--font-display), serif;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  box-shadow:
+    0 18px 40px rgba(255, 92, 154, 0.28),
+    0 0 30px rgba(192, 96, 240, 0.2);
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-position 0.4s ease;
+}
+
+.promise-button:hover {
+  transform: translateY(-3px) scale(1.03);
+  background-position: right center;
+  box-shadow:
+    0 24px 50px rgba(255, 92, 154, 0.35),
+    0 0 44px rgba(192, 96, 240, 0.28);
+}
+
+.promise-button:active {
+  transform: translateY(0) scale(0.99);
 }
 
 /* ========== HERO ========== */
@@ -1057,6 +1325,11 @@ body {
 /* ========== RESPONSIVE ========== */
 
 @media (max-width: 768px) {
+  .promise-screen { padding: 1.25rem; }
+  .promise-envelope { min-height: 320px; height: min(108vw, 390px); }
+  .promise-envelope-letter { top: 10%; width: min(90%, 520px); }
+  .promise-seal-row { gap: 0.75rem; }
+  .promise-button { width: 100%; max-width: 240px; }
   .corner-flower { display: none; }
   .vine-left, .vine-right { display: none; }
   .letter-box::before, .letter-box::after { display: none; }
@@ -1071,6 +1344,9 @@ body {
 }
 
 @media (max-width: 480px) {
+  .promise-title { font-size: 1.7rem; }
+  .promise-text { font-size: 0.92rem; line-height: 1.7; }
+  .promise-envelope-letter { padding: 1.15rem; }
   .flower-garden { gap: 1.5rem 2rem; }
   .age-digit { border-radius: 14px; }
   .memories-section { padding-inline: 1rem; }
