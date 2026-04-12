@@ -628,7 +628,7 @@ export default function BirthdayPage() {
 
               <div className="letter-sig">
                 <p>Apna special day bahut achhe se enjoy karna aur hanesha 😊 karna thik hai .</p>
-                <p className="letter-sig-name">Tumhara Chota as Bhai 💕</p>
+                <p className="letter-sig-name">Tumhara Chota sa Bhai 💕</p>
               </div>
             </div>
 
