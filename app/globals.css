@@ -245,6 +245,40 @@ body {
   to { opacity: 0; visibility: hidden; }
 }
 
+@keyframes heartExplode {
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(0deg);
+    opacity: 0;
+    filter: blur(4px);
+  }
+  10% {
+    transform: translate(-50%, -50%) scale(3) rotate(10deg);
+    opacity: 1;
+    filter: blur(0px);
+  }
+  30% { opacity: 1; }
+  75% { opacity: 0.85; filter: blur(0px); }
+  100% {
+    transform: translate(calc(-50% + var(--hx)), calc(-50% + var(--hy)))
+               scale(var(--hs, 0.4))
+               rotate(var(--hr, 360deg));
+    opacity: 0;
+    filter: blur(3px);
+  }
+}
+
+@keyframes envelopeShatter {
+  0%   { transform: scale(1);    opacity: 1;   filter: blur(0px); }
+  20%  { transform: scale(1.1);  opacity: 1;   filter: blur(0px); }
+  60%  { transform: scale(0.3);  opacity: 0.4; filter: blur(6px); }
+  100% { transform: scale(0.02); opacity: 0;   filter: blur(16px); }
+}
+
+@keyframes screenDim {
+  0%   { opacity: 1; }
+  100% { opacity: 0; pointer-events: none; }
+}
+
 /* ========== UTILITY ========== */
 
 .gradient-text {
@@ -310,8 +344,36 @@ body {
     linear-gradient(145deg, #03000b 0%, #120022 45%, #22003f 100%);
 }
 
-.promise-screen.opened {
-  animation: promiseFadeAway 1.2s ease 0.45s forwards;
+.promise-screen.shattering {
+  /* dark background lingers so flying hearts have contrast, then fades */
+  animation: screenDim 0.7s ease 1.6s forwards;
+}
+
+.promise-envelope-wrap.shattering {
+  animation: envelopeShatter 0.5s cubic-bezier(0.6, 0, 1, 0.6) 0s forwards;
+  pointer-events: none;
+}
+
+/* ── Heart explosion overlay ──
+   Rendered at root level (outside promise-screen) so overflow:hidden
+   on the promise-screen cannot clip hearts flying across the full page. */
+.hearts-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;          /* above everything */
+  pointer-events: none;
+  overflow: visible;
+}
+
+.heart-piece {
+  position: absolute;
+  top: 50%;              /* burst from viewport centre */
+  left: 50%;
+  line-height: 1;
+  will-change: transform, opacity;
+  animation: heartExplode cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  filter: drop-shadow(0 0 10px currentColor);
+  user-select: none;
 }
 
 .promise-stars {

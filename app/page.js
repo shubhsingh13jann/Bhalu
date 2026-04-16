@@ -12,6 +12,9 @@ import photo8 from '../Images/1775886682498.png'
 import photo9 from '../Images/1775886682638.png'
 import photo10 from '../Images/1775886682736.png'
 import photo11 from '../Images/1775886682803.png'
+import photo12 from '../Images/LS20260403164527.png'
+import photo13 from '../Images/LS20260403164533.png'
+import photo14 from '../Images/LS20260403164542.png'
 
 /* ══════════════════════════════════════════════
    SVG FLOWER COMPONENTS
@@ -169,6 +172,9 @@ const PHOTO_MEMORIES = [
   { src: photo9, title: 'Heartfelt Frame', note: 'Elegant, warm, and beautifully unforgettable.', size: 'tall', tilt: '-5deg' },
   { src: photo10, title: 'Sweet Detail', note: 'A little pause in time, held forever.', size: 'square', tilt: '2deg' },
   { src: photo11, title: 'Forever Lovely', note: 'A closing frame for a gallery made with love.', size: 'tall', tilt: '5deg' },
+  { src: photo12, title: 'New Memory', note: 'Another beautiful moment, forever treasured.', size: 'wide', tilt: '-3deg' },
+  { src: photo13, title: 'Sweet Capture', note: 'A frame that warms the heart every time.', size: 'square', tilt: '4deg' },
+  { src: photo14, title: 'Cherished Instant', note: 'One more gem added to this gallery of love.', size: 'tall', tilt: '-2deg' },
 ]
 
 /* ══════════════════════════════════════════════
@@ -183,6 +189,8 @@ export default function BirthdayPage() {
   const [ready, setReady] = useState(false)
   const [promiseAccepted, setPromiseAccepted] = useState(false)
   const [openingEnvelope, setOpeningEnvelope] = useState(false)
+  const [heartsActive, setHeartsActive] = useState(false)
+  const [heartPieces, setHeartPieces] = useState([])
 
   /* ── Canvas sparkles ── */
   useEffect(() => {
@@ -335,9 +343,38 @@ export default function BirthdayPage() {
   const handlePromise = () => {
     if (openingEnvelope) return
     setOpeningEnvelope(true)
+
+    // Phase 1 — after lid opens, burst hearts from envelope center
     openTimerRef.current = setTimeout(() => {
-      setPromiseAccepted(true)
-    }, 1600)
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const palette = ['#ff5c9a','#ff2d78','#c060f0','#ffd700','#ffb3d9','#a855f7','#ff80c0','#fff','#ec4899']
+      const pieces = Array.from({ length: 72 }, (_, i) => {
+        // Spread evenly across all angles so every corner gets covered
+        const baseAngle = (i / 72) * Math.PI * 2
+        const jitter    = (Math.random() - 0.5) * 0.4
+        const angle     = baseAngle + jitter
+        const dist      = vw * 0.35 + Math.random() * Math.max(vw, vh) * 0.9
+        return {
+          id:       i,
+          hx:       `${Math.cos(angle) * dist}px`,
+          hy:       `${Math.sin(angle) * dist}px`,
+          hr:       `${Math.random() * 720 - 360}deg`,
+          hs:       Math.random() * 0.7 + 0.2,
+          size:     Math.random() * 32 + 14,
+          delay:    Math.random() * 0.35,
+          duration: Math.random() * 0.6 + 1.1,
+          color:    palette[i % palette.length],
+        }
+      })
+      setHeartPieces(pieces)
+      setHeartsActive(true)
+
+      // Phase 2 — reveal main page after hearts finish
+      openTimerRef.current = setTimeout(() => {
+        setPromiseAccepted(true)
+      }, 2200)
+    }, 850)
   }
 
   const confetti = Array.from({ length: 26 }, (_, i) => {
@@ -361,12 +398,12 @@ export default function BirthdayPage() {
   return (
     <>
       {!promiseAccepted && (
-        <section className={`promise-screen ${openingEnvelope ? 'opened' : ''}`}>
+        <section className={`promise-screen ${openingEnvelope ? 'opened' : ''} ${heartsActive ? 'shattering' : ''}`}>
           <div className="promise-stars" aria-hidden="true" />
           <div className="promise-aura promise-aura-left" aria-hidden="true" />
           <div className="promise-aura promise-aura-right" aria-hidden="true" />
 
-          <div className="promise-envelope-wrap">
+          <div className={`promise-envelope-wrap ${heartsActive ? 'shattering' : ''}`}>
             <div className="promise-envelope-shadow" aria-hidden="true" />
             <div className="promise-envelope">
               <div className="promise-envelope-top" aria-hidden="true" />
@@ -390,6 +427,28 @@ export default function BirthdayPage() {
             </div>
           </div>
         </section>
+      )}
+
+      {/* ── Heart explosion — root-level so nothing clips it ── */}
+      {heartsActive && !promiseAccepted && (
+        <div className="hearts-overlay" aria-hidden="true">
+          {heartPieces.map(p => (
+            <span
+              key={p.id}
+              className="heart-piece"
+              style={{
+                fontSize:          `${p.size}px`,
+                color:              p.color,
+                animationDelay:    `${p.delay}s`,
+                animationDuration: `${p.duration}s`,
+                '--hx': p.hx,
+                '--hy': p.hy,
+                '--hr': p.hr,
+                '--hs': p.hs,
+              }}
+            >♥</span>
+          ))}
+        </div>
       )}
 
       {/* Fixed sparkle layer */}
