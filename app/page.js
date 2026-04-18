@@ -187,10 +187,13 @@ export default function BirthdayPage() {
   const rafRef     = useRef(null)
   const openTimerRef = useRef(null)
   const [ready, setReady] = useState(false)
-  const [promiseAccepted, setPromiseAccepted] = useState(false)
+  // stage: 'promise' → 'cake' → 'gift' → 'website'
+  const [stage, setStage] = useState('promise')
   const [openingEnvelope, setOpeningEnvelope] = useState(false)
   const [heartsActive, setHeartsActive] = useState(false)
   const [heartPieces, setHeartPieces] = useState([])
+  const [candleBlown, setCandleBlown] = useState(false)
+  const [giftOpening, setGiftOpening] = useState(false)
 
   /* ── Canvas sparkles ── */
   useEffect(() => {
@@ -326,11 +329,11 @@ export default function BirthdayPage() {
   /* ── Mount fade-in ── */
   useEffect(() => { const t = setTimeout(() => setReady(true), 80); return () => clearTimeout(t) }, [])
 
-  /* ── Lock page until promise ── */
+  /* ── Lock scroll until website stage ── */
   useEffect(() => {
-    document.body.style.overflow = promiseAccepted ? '' : 'hidden'
+    document.body.style.overflow = stage === 'website' ? '' : 'hidden'
     return () => { document.body.style.overflow = '' }
-  }, [promiseAccepted])
+  }, [stage])
 
   useEffect(() => {
     return () => {
@@ -370,11 +373,25 @@ export default function BirthdayPage() {
       setHeartPieces(pieces)
       setHeartsActive(true)
 
-      // Phase 2 — reveal main page after hearts finish
+      // Phase 2 — show cake after hearts finish
       openTimerRef.current = setTimeout(() => {
-        setPromiseAccepted(true)
+        setHeartsActive(false)
+        setStage('cake')
       }, 2200)
     }, 850)
+  }
+
+  const handleBlow = () => {
+    setCandleBlown(true)
+    // After candle-blow animation, transition to gift box
+    setTimeout(() => setStage('gift'), 2600)
+  }
+
+  const handleGiftOpen = () => {
+    if (giftOpening) return
+    setGiftOpening(true)
+    // After box-open animation, show website
+    setTimeout(() => setStage('website'), 2000)
   }
 
   const confetti = Array.from({ length: 26 }, (_, i) => {
@@ -397,15 +414,26 @@ export default function BirthdayPage() {
 
   return (
     <>
-      {!promiseAccepted && (
+      {/* ══ STAGE: PROMISE ══ */}
+      {stage === 'promise' && (
         <section className={`promise-screen ${openingEnvelope ? 'opened' : ''} ${heartsActive ? 'shattering' : ''}`}>
           <div className="promise-stars" aria-hidden="true" />
           <div className="promise-aura promise-aura-left" aria-hidden="true" />
           <div className="promise-aura promise-aura-right" aria-hidden="true" />
-
           <div className={`promise-envelope-wrap ${heartsActive ? 'shattering' : ''}`}>
             <div className="promise-envelope-shadow" aria-hidden="true" />
             <div className="promise-envelope">
+              <div className="promise-bear-ears" aria-hidden="true">
+                <span className="promise-bear-ear promise-bear-ear-left" />
+                <span className="promise-bear-ear promise-bear-ear-right" />
+              </div>
+              <div className="promise-bear-face" aria-hidden="true">
+                <span className="promise-bear-eye promise-bear-eye-left" />
+                <span className="promise-bear-eye promise-bear-eye-right" />
+                <span className="promise-bear-snout">
+                  <span className="promise-bear-nose" />
+                </span>
+              </div>
               <div className="promise-envelope-top" aria-hidden="true" />
               <div className="promise-envelope-letter">
                 <p className="promise-kicker">Ek Chhota Sa Promise Pehle</p>
@@ -414,7 +442,6 @@ export default function BirthdayPage() {
                   Bas itna sa vaada chahiye, ki chahe din kaise bhi ho, tum apni smile kabhi khona mat.
                   Aaj ka yeh surprise tabhi khulega jab tum yeh promise karogi.
                 </p>
-
                 <div className="promise-seal-row">
                   <span className="promise-seal-flower">🌸</span>
                   <button type="button" className="promise-button" onClick={handlePromise}>
@@ -424,42 +451,239 @@ export default function BirthdayPage() {
                 </div>
               </div>
               <div className="promise-envelope-body" aria-hidden="true" />
+              <div className="promise-bear-paws" aria-hidden="true">
+                <span className="promise-bear-paw promise-bear-paw-left" />
+                <span className="promise-bear-paw promise-bear-paw-right" />
+              </div>
             </div>
           </div>
         </section>
       )}
 
-      {/* ── Heart explosion — root-level so nothing clips it ── */}
-      {heartsActive && !promiseAccepted && (
+      {/* Hearts explosion overlay — root level, not clipped */}
+      {heartsActive && stage === 'promise' && (
         <div className="hearts-overlay" aria-hidden="true">
           {heartPieces.map(p => (
-            <span
-              key={p.id}
-              className="heart-piece"
-              style={{
-                fontSize:          `${p.size}px`,
-                color:              p.color,
-                animationDelay:    `${p.delay}s`,
-                animationDuration: `${p.duration}s`,
-                '--hx': p.hx,
-                '--hy': p.hy,
-                '--hr': p.hr,
-                '--hs': p.hs,
-              }}
-            >♥</span>
+            <span key={p.id} className="heart-piece" style={{
+              fontSize: `${p.size}px`, color: p.color,
+              animationDelay: `${p.delay}s`, animationDuration: `${p.duration}s`,
+              '--hx': p.hx, '--hy': p.hy, '--hr': p.hr, '--hs': p.hs,
+            }}>♥</span>
           ))}
         </div>
       )}
 
-      {/* Fixed sparkle layer */}
-      <canvas ref={canvasRef} className="sparkle-canvas" />
+      {/* ══ STAGE: CAKE ══ */}
+      {stage === 'cake' && (
+        <section className="cake-screen">
+          <div className="cake-bg-aura cake-bg-aura-left" />
+          <div className="cake-bg-aura cake-bg-aura-right" />
+          <div className="cake-stars" aria-hidden="true" />
 
-      {/* Fixed petal rain */}
+          <div className="cake-header  ">
+            <p className="cake-eyebrow">✨ Your 19th Birthday ✨</p>
+            <h2 className="cake-title">Make a Wish!</h2>
+            <p className="cake-sub">Phoonk maar ke apni wish maango 🌟</p>
+          </div>
+
+          {/* ── 3D Princess Cake ── */}
+          <div className="cake-scene-wrap" >
+            <div className={`cake-scene ${candleBlown ? 'cake-blown' : ''}`}>
+
+              {/* ── Candle group + Crown — sits above ct-3 ── */}
+              <div className="candle-group">
+                <div className="cake-crown-top">
+                  <div className="crown-jewel" />
+                  <div className="crown-svg-wrap">👑</div>
+                </div>
+                <div className="candle-row">
+                  {/* Left small candle */}
+                  <div className="candle candle-s candle-left">
+                    {!candleBlown && <div className="flame flame-s"><div className="flame-inner" /></div>}
+                    {candleBlown && <div className="smoke smoke-s" />}
+                    <div className="wick" />
+                    <div className="candle-body cb-pink">
+                      <div className="candle-stripe" />
+                    </div>
+                  </div>
+
+                  {/* Centre big candle */}
+                  <div className="candle candle-m candle-center">
+                    {!candleBlown && <div className="flame flame-m"><div className="flame-inner" /></div>}
+                    {candleBlown && <div className="smoke smoke-m" />}
+                    <div className="wick" />
+                    <div className="candle-body cb-gold">
+                      <div className="candle-stripe" />
+                      <div className="candle-num">19</div>
+                    </div>
+                  </div>
+
+                  {/* Right small candle */}
+                  <div className="candle candle-s candle-right">
+                    {!candleBlown && <div className="flame flame-s"><div className="flame-inner" /></div>}
+                    {candleBlown && <div className="smoke smoke-s" />}
+                    <div className="wick" />
+                    <div className="candle-body cb-lavender">
+                      <div className="candle-stripe" />
+                    </div>
+                  </div>
+                </div>
+
+              </div>{/* end candle-group */}
+
+              {/* Tier 1 — top, smallest */}
+              <div className="cake-tier ct-3">
+                <div className="ct-top">
+                  <div className="ct-top-inner" />
+                </div>
+                <div className="ct-body">
+                  <div className="ct-frosting-drips">
+                    {Array.from({length:5},(_,i)=>(
+                      <div key={i} className="drip" style={{'--di':i,'--dh':`${Math.random()*12+6}px`}} />
+                    ))}
+                  </div>
+                  <div className="ct-heart-decos">
+                    {['💕','🌸','💕'].map((d,i)=>(
+                      <span key={i} className="ct-deco" style={{'--deco-i':i}}>{d}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="ct-depth" />
+              </div>{/* end ct-3 */}
+
+              {/* Tier 2 — middle */}
+              <div className="cake-tier ct-2">
+                <div className="ct-top">
+                  <div className="ct-top-inner" />
+                </div>
+                <div className="ct-body">
+                  <div className="ct-frosting-drips">
+                    {Array.from({length:7},(_,i)=>(
+                      <div key={i} className="drip" style={{'--di':i,'--dh':`${Math.random()*14+8}px`}} />
+                    ))}
+                  </div>
+                  <div className="ct-decos">
+                    {['💜','⭐','💜','⭐','💜'].map((d,i)=>(
+                      <span key={i} className="ct-deco" style={{'--deco-i':i}}>{d}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="ct-depth" />
+              </div>{/* end ct-2 */}
+
+              {/* Tier 3 — bottom, biggest */}
+              <div className="cake-tier ct-1">
+                <div className="ct-top">
+                  <div className="ct-top-inner" />
+                </div>
+                <div className="ct-body">
+                  <div className="ct-frosting-drips">
+                    {Array.from({length:9},(_,i)=>(
+                      <div key={i} className="drip" style={{'--di':i,'--dh':`${Math.random()*18+10}px`}} />
+                    ))}
+                  </div>
+                  <div className="ct-decos">
+                    {['🌹','✨','🌸','💫','🌹','✨','🌸'].map((d,i)=>(
+                      <span key={i} className="ct-deco" style={{'--deco-i':i}}>{d}</span>
+                    ))}
+                  </div>
+                  <div className="ct-ribbon ct-ribbon-h" />
+                  <div className="ct-ribbon ct-ribbon-v" />
+                </div>
+                <div className="ct-depth" />
+              </div>{/* end ct-1 */}
+
+            </div>{/* end cake-scene */}
+
+            {/* Plate / board */}
+            <div className="cake-plate" />
+
+          </div>{/* end cake-scene-wrap */}
+
+          {/* Blow button or wish message */}
+          {!candleBlown ? (
+            <button className="blow-btn" onClick={handleBlow}>
+              <span className="blow-icon">💨</span>
+              <span>Phoonk Maro 🥰!</span>
+            </button>
+          ) : (
+            <div className="wish-granted">
+              <p className="wish-granted-text">🌟 Meri bhalu🐻❤️ ki wish zaroor poori hogi! 🌟</p>
+              <p className="wish-granted-sub">Ek special gift hai tumhare liye…</p>
+            </div>
+          )}
+
+        </section>
+      )}
+
+      {/* ══ STAGE: GIFT BOX ══ */}
+      {stage === 'gift' && (
+        <section className="gift-screen">
+          <div className="gift-bg-aura gift-bg-left" />
+          <div className="gift-bg-aura gift-bg-right" />
+
+          <div className="gift-header reveal-instant">
+            <p className="gift-eyebrow">🎁 Ek Khaas Tohfa 🎁</p>
+            <h2 className="gift-title">Kholo Ise!</h2>
+            <p className="gift-sub">❤️Special gift for special person❤️</p>
+          </div>
+
+          {/* Floating sparkles around box */}
+          <div className="gift-sparkles" aria-hidden="true">
+            {Array.from({length:12},(_,i)=>(
+              <div key={i} className="gs" style={{'--gsi':i,'--gsx':`${Math.cos((i/12)*Math.PI*2)*160}px`,'--gsy':`${Math.sin((i/12)*Math.PI*2)*100}px`}} />
+            ))}
+          </div>
+
+          <button
+            className={`gift-box-btn ${giftOpening ? 'opening' : ''}`}
+            onClick={handleGiftOpen}
+            aria-label="Open gift box"
+          >
+            {/* 3D Gift Box */}
+            <div className="gbox-scene">
+              {/* Lid */}
+              <div className={`gbox-lid ${giftOpening ? 'gbox-lid-open' : ''}`}>
+                <div className="gbox-lid-top" />
+                <div className="gbox-lid-front" />
+                <div className="gbox-lid-side" />
+                <div className="gbox-bow">
+                  <div className="bow-loop bow-left" />
+                  <div className="bow-loop bow-right" />
+                  <div className="bow-knot" />
+                  <div className="bow-tail bow-tail-l" />
+                  <div className="bow-tail bow-tail-r" />
+                </div>
+              </div>
+              {/* Box body */}
+              <div className="gbox-body">
+                <div className="gbox-front">
+                  <div className="gbox-ribbon-h" />
+                  <div className="gbox-ribbon-v" />
+                  {giftOpening && (
+                    <div className="gift-burst" aria-hidden="true">
+                      {['✨','💖','🌸','⭐','💕','🌟','🎀','💫'].map((e,i)=>(
+                        <span key={i} className="burst-piece" style={{'--bi':i}}>{e}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div className="gbox-side" />
+                <div className="gbox-bottom" />
+              </div>
+            </div>
+            {!giftOpening && <p className="gift-tap-hint">Tap to open 🎀</p>}
+          </button>
+        </section>
+      )}
+
+      {/* Fixed sparkle layer — always visible */}
+      <canvas ref={canvasRef} className="sparkle-canvas" />
       <div ref={petalsRef} className="petals-layer" />
 
       <main
         className="page-wrapper"
-        style={{ opacity: ready && promiseAccepted ? 1 : 0, transition: 'opacity 1s ease' }}
+        style={{ opacity: ready && stage === 'website' ? 1 : 0, transition: 'opacity 1.2s ease' }}
       >
 
         {/* ══════ HERO ══════ */}

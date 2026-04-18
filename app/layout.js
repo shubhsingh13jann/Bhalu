@@ -1,4 +1,5 @@
 import './globals.css'
+import './cake-gift.css'
 import { Playfair_Display, Dancing_Script, Lato } from 'next/font/google'
 
 const playfair = Playfair_Display({

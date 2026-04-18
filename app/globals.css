@@ -436,16 +436,20 @@ body {
   max-height: 420px;
   min-height: 340px;
   perspective: 1600px;
+  isolation: isolate;
 }
 
 .promise-envelope-body,
 .promise-envelope-top {
   position: absolute;
-  inset: 0;
-  border-radius: 28px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 36px 36px 28px 28px;
 }
 
 .promise-envelope-body {
+  top: 18%;
   background:
     linear-gradient(135deg, rgba(255, 240, 246, 0.98), rgba(255, 226, 238, 0.94)),
     linear-gradient(135deg, rgba(255, 92, 154, 0.2), rgba(192, 96, 240, 0.18));
@@ -453,35 +457,37 @@ body {
     0 30px 90px rgba(0, 0, 0, 0.38),
     0 0 0 1px rgba(255, 255, 255, 0.6) inset,
     0 0 40px rgba(255, 92, 154, 0.16);
-  clip-path: polygon(0 26%, 50% 60%, 100% 26%, 100% 100%, 0 100%);
+  clip-path: polygon(6% 18%, 16% 7%, 33% 7%, 38% 14%, 62% 14%, 67% 7%, 84% 7%, 94% 18%, 95% 100%, 5% 100%);
 }
 
 .promise-envelope-body::before,
 .promise-envelope-body::after {
   content: '';
   position: absolute;
-  top: 24%;
+  top: 18%;
   bottom: 0;
-  width: 52%;
-  background: linear-gradient(145deg, rgba(255,255,255,0.25), rgba(255,92,154,0.1));
+  width: 50%;
+  background: linear-gradient(145deg, rgba(255,255,255,0.28), rgba(255,92,154,0.12));
 }
 
 .promise-envelope-body::before {
   left: 0;
-  clip-path: polygon(0 0, 100% 40%, 100% 100%, 0 100%);
+  clip-path: polygon(0 0, 100% 32%, 88% 100%, 0 100%);
 }
 
 .promise-envelope-body::after {
   right: 0;
-  clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 100%);
+  clip-path: polygon(0 32%, 100% 0, 100% 100%, 12% 100%);
 }
 
 .promise-envelope-top {
-  top: 0;
-  height: 55%;
+  top: 19%;
+  left: 8%;
+  right: 8%;
+  height: 50%;
   transform-origin: top center;
   background: linear-gradient(160deg, #ffdbe8, #ffbad3 65%, #f08ab7 100%);
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  clip-path: polygon(0 0, 100% 0, 50% 96%);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
   z-index: 3;
 }
@@ -490,10 +496,92 @@ body {
   animation: promiseUnseal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+.promise-bear-ears {
+  position: absolute;
+  top: 1%;
+  left: 0;
+  right: 0;
+  height: 22%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.promise-bear-ear {
+  position: absolute;
+  width: clamp(68px, 12vw, 88px);
+  height: clamp(68px, 12vw, 88px);
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ffe5ee, #ffbed4);
+  box-shadow:
+    0 10px 24px rgba(120, 30, 70, 0.2),
+    inset 0 0 0 1px rgba(255,255,255,0.55);
+}
+
+.promise-bear-ear::after {
+  content: '';
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffd7e4, #ff9fc1);
+}
+
+.promise-bear-ear-left { left: 10%; }
+.promise-bear-ear-right { right: 10%; }
+
+.promise-bear-face {
+  position: absolute;
+  top: 7%;
+  left: 50%;
+  width: min(72%, 340px);
+  height: 24%;
+  transform: translateX(-50%);
+  z-index: 4;
+  pointer-events: none;
+}
+
+.promise-bear-eye {
+  position: absolute;
+  top: 34%;
+  width: 10px;
+  height: 14px;
+  border-radius: 50%;
+  background: #6f3151;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.16);
+}
+
+.promise-bear-eye-left { left: 32%; }
+.promise-bear-eye-right { right: 32%; }
+
+.promise-bear-snout {
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  width: clamp(84px, 16vw, 112px);
+  height: clamp(58px, 10vw, 74px);
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: linear-gradient(180deg, #fff4f8, #ffd7e5);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.7),
+    0 8px 22px rgba(120, 30, 70, 0.12);
+}
+
+.promise-bear-nose {
+  position: absolute;
+  left: 50%;
+  top: 24%;
+  width: 24px;
+  height: 18px;
+  transform: translateX(-50%);
+  border-radius: 50% 50% 60% 60%;
+  background: #8f1f5f;
+  box-shadow: 0 12px 0 -7px rgba(143, 31, 95, 0.9);
+}
+
 .promise-envelope-letter {
   position: absolute;
   left: 50%;
-  top: 12%;
+  top: 18%;
   width: min(86%, 520px);
   padding: clamp(1.4rem, 3vw, 2rem);
   border-radius: 26px;
@@ -522,6 +610,42 @@ body {
 .promise-screen.opened .promise-envelope-letter {
   animation: promiseLetterRise 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
+
+.promise-bear-paws {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4%;
+  height: 18%;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.promise-bear-paw {
+  position: absolute;
+  width: clamp(76px, 13vw, 96px);
+  height: clamp(76px, 13vw, 96px);
+  border-radius: 46% 46% 40% 40%;
+  background: linear-gradient(160deg, #ffe3ed, #ffb7d0);
+  box-shadow:
+    0 12px 28px rgba(120, 30, 70, 0.18),
+    inset 0 0 0 1px rgba(255,255,255,0.6);
+}
+
+.promise-bear-paw::before {
+  content: '';
+  position: absolute;
+  inset: 28%;
+  border-radius: 50%;
+  background: rgba(255, 237, 244, 0.9);
+  box-shadow:
+    -16px -8px 0 -6px rgba(255, 237, 244, 0.9),
+    16px -8px 0 -6px rgba(255, 237, 244, 0.9),
+    0 -16px 0 -7px rgba(255, 237, 244, 0.9);
+}
+
+.promise-bear-paw-left { left: 14%; }
+.promise-bear-paw-right { right: 14%; }
 
 .promise-kicker {
   position: relative;
@@ -1389,7 +1513,10 @@ body {
 @media (max-width: 768px) {
   .promise-screen { padding: 1.25rem; }
   .promise-envelope { min-height: 320px; height: min(108vw, 390px); }
-  .promise-envelope-letter { top: 10%; width: min(90%, 520px); }
+  .promise-envelope-letter { top: 18%; width: min(90%, 520px); }
+  .promise-bear-ear { width: 64px; height: 64px; }
+  .promise-bear-face { width: min(78%, 300px); }
+  .promise-bear-paw { width: 72px; height: 72px; }
   .promise-seal-row { gap: 0.75rem; }
   .promise-button { width: 100%; max-width: 240px; }
   .corner-flower { display: none; }
@@ -1409,6 +1536,10 @@ body {
   .promise-title { font-size: 1.7rem; }
   .promise-text { font-size: 0.92rem; line-height: 1.7; }
   .promise-envelope-letter { padding: 1.15rem; }
+  .promise-bear-ear-left { left: 7%; }
+  .promise-bear-ear-right { right: 7%; }
+  .promise-bear-paw-left { left: 10%; }
+  .promise-bear-paw-right { right: 10%; }
   .flower-garden { gap: 1.5rem 2rem; }
   .age-digit { border-radius: 14px; }
   .memories-section { padding-inline: 1rem; }
