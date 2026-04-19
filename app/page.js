@@ -1,6 +1,10 @@
 'use client'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
+
+const EnvelopePromise = dynamic(() => import('./EnvelopePromise'), { ssr: false })
+const HeartParticles = dynamic(() => import('./HeartParticles'), { ssr: false })
 import photo1 from '../Images/1775886681934.png'
 import photo2 from '../Images/1775886682054.png'
 import photo3 from '../Images/1775886682123.png'
@@ -417,45 +421,15 @@ export default function BirthdayPage() {
       {/* ══ STAGE: PROMISE ══ */}
       {stage === 'promise' && (
         <section className={`promise-screen ${openingEnvelope ? 'opened' : ''} ${heartsActive ? 'shattering' : ''}`}>
+          <HeartParticles />
           <div className="promise-stars" aria-hidden="true" />
           <div className="promise-aura promise-aura-left" aria-hidden="true" />
           <div className="promise-aura promise-aura-right" aria-hidden="true" />
-          <div className={`promise-envelope-wrap ${heartsActive ? 'shattering' : ''}`}>
-            <div className="promise-envelope-shadow" aria-hidden="true" />
-            <div className="promise-envelope">
-              <div className="promise-bear-ears" aria-hidden="true">
-                <span className="promise-bear-ear promise-bear-ear-left" />
-                <span className="promise-bear-ear promise-bear-ear-right" />
-              </div>
-              <div className="promise-bear-face" aria-hidden="true">
-                <span className="promise-bear-eye promise-bear-eye-left" />
-                <span className="promise-bear-eye promise-bear-eye-right" />
-                <span className="promise-bear-snout">
-                  <span className="promise-bear-nose" />
-                </span>
-              </div>
-              <div className="promise-envelope-top" aria-hidden="true" />
-              <div className="promise-envelope-letter">
-                <p className="promise-kicker">Ek Chhota Sa Promise Pehle</p>
-                <h2 className="promise-title">First promise me ki hamesha khush rahogi</h2>
-                <p className="promise-text">
-                  Bas itna sa vaada chahiye, ki chahe din kaise bhi ho, tum apni smile kabhi khona mat.
-                  Aaj ka yeh surprise tabhi khulega jab tum yeh promise karogi.
-                </p>
-                <div className="promise-seal-row">
-                  <span className="promise-seal-flower">🌸</span>
-                  <button type="button" className="promise-button" onClick={handlePromise}>
-                    Promise Karo
-                  </button>
-                  <span className="promise-seal-flower">🌸</span>
-                </div>
-              </div>
-              <div className="promise-envelope-body" aria-hidden="true" />
-              <div className="promise-bear-paws" aria-hidden="true">
-                <span className="promise-bear-paw promise-bear-paw-left" />
-                <span className="promise-bear-paw promise-bear-paw-right" />
-              </div>
-            </div>
+          <div className={heartsActive ? 'shattering' : ''}>
+            <EnvelopePromise
+              openingEnvelope={openingEnvelope}
+              onPromise={handlePromise}
+            />
           </div>
         </section>
       )}
@@ -476,6 +450,7 @@ export default function BirthdayPage() {
       {/* ══ STAGE: CAKE ══ */}
       {stage === 'cake' && (
         <section className="cake-screen">
+          <HeartParticles />
           <div className="cake-bg-aura cake-bg-aura-left" />
           <div className="cake-bg-aura cake-bg-aura-right" />
           <div className="cake-stars" aria-hidden="true" />

@@ -419,6 +419,38 @@ body {
   animation: promiseLift 5s ease-in-out infinite;
 }
 
+.promise-envelope-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -18px;
+  border-radius: 52px;
+  background: transparent;
+  box-shadow:
+    0 0 28px 8px rgba(255, 92, 154, 0.35),
+    0 0 60px 18px rgba(192, 96, 240, 0.22),
+    0 0 100px 30px rgba(255, 61, 127, 0.14);
+  animation: envelopeGlowPulse 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes envelopeGlowPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 28px 8px rgba(255, 92, 154, 0.35),
+      0 0 60px 18px rgba(192, 96, 240, 0.22),
+      0 0 100px 30px rgba(255, 61, 127, 0.14);
+    opacity: 0.85;
+  }
+  50% {
+    box-shadow:
+      0 0 44px 16px rgba(255, 92, 154, 0.55),
+      0 0 90px 30px rgba(192, 96, 240, 0.38),
+      0 0 140px 50px rgba(255, 61, 127, 0.24);
+    opacity: 1;
+  }
+}
+
 .promise-envelope-shadow {
   position: absolute;
   left: 8%;
@@ -496,13 +528,84 @@ body {
   animation: promiseUnseal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+/* ── Sealed cover (new) — completely covers the envelope face ── */
+.env-sealed-cover {
+  position: absolute;
+  top: 18%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 0 0 28px 28px;
+  background: linear-gradient(170deg, #ffdbe8 0%, #ffbad3 45%, #f08ab7 100%);
+  box-shadow:
+    0 8px 32px rgba(140, 30, 80, 0.18),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+  /* z-index 5: above letter (2) and envelope-body, below bear face/ears/paws (8) */
+  z-index: 5;
+  transform-origin: top center;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+/* diagonal crease lines on the sealed cover */
+.env-cover-crease {
+  position: absolute;
+  top: 0;
+  width: 55%;
+  height: 100%;
+  pointer-events: none;
+}
+.env-cover-crease-left {
+  left: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.22) 0%, transparent 60%);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+.env-cover-crease-right {
+  right: 0;
+  background: linear-gradient(225deg, rgba(255,255,255,0.18) 0%, transparent 60%);
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+}
+
+/* wax seal */
+.env-wax-seal {
+  position: relative;
+  width: clamp(52px, 10vw, 68px);
+  height: clamp(52px, 10vw, 68px);
+  border-radius: 50%;
+  background: radial-gradient(circle at 36% 34%, #e83060, #b01030 60%, #800820);
+  box-shadow:
+    0 6px 22px rgba(140, 10, 50, 0.4),
+    inset 0 0 0 2px rgba(255, 200, 210, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.env-wax-paw {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4));
+}
+
+.env-tap-hint {
+  font-family: var(--font-cursive), cursive;
+  font-size: clamp(0.78rem, 1.8vw, 0.92rem);
+  color: rgba(120, 20, 70, 0.72);
+  letter-spacing: 0.1em;
+  z-index: 2;
+}
+
 .promise-bear-ears {
   position: absolute;
   top: 1%;
   left: 0;
   right: 0;
   height: 22%;
-  z-index: 1;
+  z-index: 8;
   pointer-events: none;
 }
 
@@ -535,7 +638,7 @@ body {
   width: min(72%, 340px);
   height: 24%;
   transform: translateX(-50%);
-  z-index: 4;
+  z-index: 8;
   pointer-events: none;
 }
 
@@ -617,7 +720,7 @@ body {
   right: 0;
   bottom: -4%;
   height: 18%;
-  z-index: 4;
+  z-index: 8;
   pointer-events: none;
 }
 
