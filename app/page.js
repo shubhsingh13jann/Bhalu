@@ -450,7 +450,6 @@ export default function BirthdayPage() {
       {/* ══ STAGE: CAKE ══ */}
       {stage === 'cake' && (
         <section className="cake-screen">
-          <HeartParticles />
           <div className="cake-bg-aura cake-bg-aura-left" />
           <div className="cake-bg-aura cake-bg-aura-right" />
           <div className="cake-stars" aria-hidden="true" />
@@ -460,6 +459,8 @@ export default function BirthdayPage() {
             <h2 className="cake-title">Make a Wish!</h2>
             <p className="cake-sub">Phoonk maar ke apni wish maango 🌟</p>
           </div>
+
+          <HeartParticles heartScale={0.20} />
 
           {/* ── 3D Princess Cake ── */}
           <div className="cake-scene-wrap" >
@@ -578,7 +579,7 @@ export default function BirthdayPage() {
           {/* Blow button or wish message */}
           {!candleBlown ? (
             <button className="blow-btn" onClick={handleBlow}>
-              <span className="blow-icon">💨</span>
+              {/* <span className="blow-icon">💨</span> */}
               <span>Phoonk Maro 🥰!</span>
             </button>
           ) : (
