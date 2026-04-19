@@ -1,21 +1,24 @@
 'use client'
 import { useMemo, useRef, Suspense } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 
 const PARTICLE_COUNT = 1500
 
-function getHeartPosition(t, scale) {
+// Targets at scale=1; actual scale computed from viewport in useFrame
+function getHeartPosition(t) {
   const x = 16 * Math.pow(Math.sin(t), 3)
   const y =
     13 * Math.cos(t) -
     5 * Math.cos(2 * t) -
     2 * Math.cos(3 * t) -
     Math.cos(4 * t)
-  return new THREE.Vector3(x, y, 0).multiplyScalar(scale)
+  return new THREE.Vector3(x, y, 0)
 }
 
-// Purple/violet gradient palette
+const HEART_WIDTH  = 32   // bounding box width at scale=1
+const HEART_HEIGHT = 28.6 // bounding box height at scale=1
+
 const PALETTE = [
   [0.498, 0.361, 1.0],
   [0.749, 0.600, 1.0],
@@ -26,6 +29,7 @@ const PALETTE = [
 ]
 
 function Particles({ heartScale }) {
+  const { viewport } = useThree()
   const mainRef = useRef()
   const glowRef = useRef()
 
@@ -40,7 +44,7 @@ function Particles({ heartScale }) {
         (Math.random() - 0.5) * 20
       )
       const t = (i / PARTICLE_COUNT) * Math.PI * 2
-      const heart = getHeartPosition(t, heartScale)
+      const heart = getHeartPosition(t)
       tar.push(heart.x, heart.y, heart.z)
       const c = PALETTE[i % PALETTE.length]
       col.push(c[0], c[1], c[2])
@@ -51,19 +55,24 @@ function Particles({ heartScale }) {
       targets:       new Float32Array(tar),
       colors:        new Float32Array(col),
     }
-  }, [heartScale])
+  }, [])
 
   useFrame(({ clock }) => {
     if (!mainRef.current) return
     const time = clock.getElapsedTime()
 
+    // Clamp scale so heart always fits within the visible viewport
+    const maxW = (viewport.width  * 0.88) / HEART_WIDTH
+    const maxH = (viewport.height * 0.85) / HEART_HEIGHT
+    const effectiveScale = Math.min(heartScale, maxW, maxH)
+
     const pos = mainRef.current.geometry.attributes.position.array
     const col = mainRef.current.geometry.attributes.color.array
 
     for (let i = 0; i < pos.length; i += 3) {
-      pos[i]     += (targets[i]     - pos[i])     * 0.02
-      pos[i + 1] += (targets[i + 1] - pos[i + 1]) * 0.02
-      pos[i + 2] += (targets[i + 2] - pos[i + 2]) * 0.02
+      pos[i]     += (targets[i]     * effectiveScale - pos[i])     * 0.02
+      pos[i + 1] += (targets[i + 1] * effectiveScale - pos[i + 1]) * 0.02
+      pos[i + 2] += (targets[i + 2] * effectiveScale - pos[i + 2]) * 0.02
     }
 
     for (let i = 0; i < PARTICLE_COUNT; i++) {
@@ -98,8 +107,8 @@ function Particles({ heartScale }) {
 
       <points ref={mainRef}>
         <bufferGeometry>
-          <bufferAttribute attach="attributes-position" count={PARTICLE_COUNT} array={positions}     itemSize={3} />
-          <bufferAttribute attach="attributes-color"    count={PARTICLE_COUNT} array={colors}        itemSize={3} />
+          <bufferAttribute attach="attributes-position" count={PARTICLE_COUNT} array={positions}  itemSize={3} />
+          <bufferAttribute attach="attributes-color"    count={PARTICLE_COUNT} array={colors}     itemSize={3} />
         </bufferGeometry>
         <pointsMaterial size={0.045} vertexColors transparent opacity={0.55} depthWrite={false} blending={THREE.AdditiveBlending} />
       </points>
