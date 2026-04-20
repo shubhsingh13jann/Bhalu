@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 
 const EnvelopePromise = dynamic(() => import('./EnvelopePromise'), { ssr: false })
 const HeartParticles = dynamic(() => import('./HeartParticles'), { ssr: false })
+const GiftBoxParticles = dynamic(() => import('./GiftBoxParticles'), { ssr: false })
 import photo1 from '../Images/1775886681934.png'
 import photo2 from '../Images/1775886682054.png'
 import photo3 from '../Images/1775886682123.png'
@@ -597,12 +598,7 @@ export default function BirthdayPage() {
         <section className="gift-screen">
           <div className="gift-bg-aura gift-bg-left" />
           <div className="gift-bg-aura gift-bg-right" />
-
-          <div className="gift-header reveal-instant">
-            <p className="gift-eyebrow">🎁 Ek Khaas Tohfa 🎁</p>
-            <h2 className="gift-title">Kholo Ise!</h2>
-            <p className="gift-sub">❤️Special gift for special person❤️</p>
-          </div>
+          <GiftBoxParticles heartScale={0.22} />
 
           {/* Floating sparkles around box */}
           <div className="gift-sparkles" aria-hidden="true">
@@ -611,45 +607,55 @@ export default function BirthdayPage() {
             ))}
           </div>
 
-          <button
-            className={`gift-box-btn ${giftOpening ? 'opening' : ''}`}
-            onClick={handleGiftOpen}
-            aria-label="Open gift box"
-          >
-            {/* 3D Gift Box */}
-            <div className="gbox-scene">
-              {/* Lid */}
-              <div className={`gbox-lid ${giftOpening ? 'gbox-lid-open' : ''}`}>
-                <div className="gbox-lid-top" />
-                <div className="gbox-lid-front" />
-                <div className="gbox-lid-side" />
-                <div className="gbox-bow">
-                  <div className="bow-loop bow-left" />
-                  <div className="bow-loop bow-right" />
-                  <div className="bow-knot" />
-                  <div className="bow-tail bow-tail-l" />
-                  <div className="bow-tail bow-tail-r" />
-                </div>
-              </div>
-              {/* Box body */}
-              <div className="gbox-body">
-                <div className="gbox-front">
-                  <div className="gbox-ribbon-h" />
-                  <div className="gbox-ribbon-v" />
-                  {giftOpening && (
-                    <div className="gift-burst" aria-hidden="true">
-                      {['✨','💖','🌸','⭐','💕','🌟','🎀','💫'].map((e,i)=>(
-                        <span key={i} className="burst-piece" style={{'--bi':i}}>{e}</span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <div className="gbox-side" />
-                <div className="gbox-bottom" />
-              </div>
+          <div className="gift-stage-hero">
+            <div className="gift-header reveal-instant">
+              <p className="gift-eyebrow">🎁 Ek Khaas Tohfa 🎁</p>
+              <h2 className="gift-title">Kholo Ise!</h2>
+              <p className="gift-sub">❤️Special gift for special person❤️</p>
             </div>
-            {!giftOpening && <p className="gift-tap-hint">Tap to open 🎀</p>}
-          </button>
+
+            <div className="gift-box-stage">
+              <button
+                className={`gift-box-btn ${giftOpening ? 'opening' : ''}`}
+                onClick={handleGiftOpen}
+                aria-label="Open gift box"
+              >
+                {/* 3D Gift Box */}
+                <div className="gbox-scene">
+                  {/* Lid */}
+                  <div className={`gbox-lid ${giftOpening ? 'gbox-lid-open' : ''}`}>
+                    <div className="gbox-lid-top" />
+                    <div className="gbox-lid-front" />
+                    <div className="gbox-lid-side" />
+                    <div className="gbox-bow">
+                      <div className="bow-loop bow-left" />
+                      <div className="bow-loop bow-right" />
+                      <div className="bow-knot" />
+                      <div className="bow-tail bow-tail-l" />
+                      <div className="bow-tail bow-tail-r" />
+                    </div>
+                  </div>
+                  {/* Box body */}
+                  <div className="gbox-body">
+                    <div className="gbox-front">
+                      <div className="gbox-ribbon-h" />
+                      <div className="gbox-ribbon-v" />
+                      {giftOpening && (
+                        <div className="gift-burst" aria-hidden="true">
+                          {['✨','💖','🌸','⭐','💕','🌟','🎀','💫'].map((e,i)=>(
+                            <span key={i} className="burst-piece" style={{'--bi':i}}>{e}</span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <div className="gbox-side" />
+                    <div className="gbox-bottom" />
+                  </div>
+                </div>
+                {!giftOpening && <p className="gift-tap-hint">Tap to open 🎀</p>}
+              </button>
+            </div>
+          </div>
         </section>
       )}
 
