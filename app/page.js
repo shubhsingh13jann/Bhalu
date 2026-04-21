@@ -166,20 +166,20 @@ const GARDEN_FLOWERS = [
 ]
 
 const PHOTO_MEMORIES = [
-  { src: photo1, title: 'Golden Smile', note: 'A frame full of warmth and light.', size: 'wide', tilt: '-5deg' },
-  { src: photo2, title: 'Soft Moment', note: 'The kind of memory that glows quietly.', size: 'wide', tilt: '4deg' },
-  { src: photo3, title: 'Little Bloom', note: 'Small picture, huge sweetness.', size: 'square', tilt: '-3deg' },
-  { src: photo4, title: 'Radiant Day', note: 'A bright memory to keep close forever.', size: 'wide', tilt: '5deg' },
-  { src: photo5, title: 'Tiny Treasure', note: 'A snapshot that feels like a flower pressed in a diary.', size: 'square', tilt: '-4deg' },
-  { src: photo6, title: 'Sweet Spark', note: 'Soft, playful, and full of charm.', size: 'square', tilt: '3deg' },
-  { src: photo7, title: 'Graceful Glow', note: 'A portrait moment with a dreamy silhouette.', size: 'tall', tilt: '-2deg' },
-  { src: photo8, title: 'Blooming Memory', note: 'One of those pictures that instantly becomes a favourite.', size: 'tall', tilt: '4deg' },
-  { src: photo9, title: 'Heartfelt Frame', note: 'Elegant, warm, and beautifully unforgettable.', size: 'tall', tilt: '-5deg' },
-  { src: photo10, title: 'Sweet Detail', note: 'A little pause in time, held forever.', size: 'square', tilt: '2deg' },
-  { src: photo11, title: 'Forever Lovely', note: 'A closing frame for a gallery made with love.', size: 'tall', tilt: '5deg' },
-  { src: photo12, title: 'New Memory', note: 'Another beautiful moment, forever treasured.', size: 'wide', tilt: '-3deg' },
-  { src: photo13, title: 'Sweet Capture', note: 'A frame that warms the heart every time.', size: 'square', tilt: '4deg' },
-  { src: photo14, title: 'Cherished Instant', note: 'One more gem added to this gallery of love.', size: 'tall', tilt: '-2deg' },
+  { src: photo1, title: 'Emotional Monent', note: 'Jab bhi us photo ko dekhta hu wahi sukoon yaad aata hai.', size: 'wide', tilt: '-5deg' },
+  { src: photo2, title: 'Golden Moment', note: 'Kaash vo bachpan kaa time vapas aa jaye.', size: 'wide', tilt: '4deg' },
+  { src: photo3, title: 'Parrot Queen👑', note: 'Sabse cute aur sabse pyaari.', size: 'square', tilt: '-3deg' },
+  { src: photo4, title: 'Diwali Moment', note: 'Sorry bahut kosish ki par vo photo ban nhi paai 🥰.', size: 'wide', tilt: '5deg' },
+  { src: photo5, title: 'Again Parrot Queen👑', note: 'Abhi bhi yaad hai ye too videocall par dekhi thi live darshan hue the 😂.', size: 'square', tilt: '-4deg' },
+  { src: photo6, title: 'My Lady Don', note: 'Sorry background thoda 19-20 ho gya hai 😅 vo ho hi nhi rha tha.', size: 'square', tilt: '3deg' },
+  { src: photo7, title: 'Again my Chotuu Don', note: 'Soo beautiful just looking like a woow 😍.', size: 'tall', tilt: '-2deg' },
+  { src: photo8, title: 'My Pari', note: 'Vaise to mai tha nhi isme lakin fir bhi ye meri one of the favouriate hai 🥹.', size: 'tall', tilt: '4deg' },
+  { src: photo9, title: 'One of my memory', note: 'Ye photo too nhi hai mere paas par ye vo hai jb meri bhalu ne pehli baar rakhi bandhi thi mujhe.', size: 'tall', tilt: '-5deg' },
+  { src: photo10, title: 'Little Message', note: 'Hamesha khush rho, smile karo aur apna dhyan rakkho. Varna mera mann nhi lgta jb chot lga leti hoo.🥺', size: 'square', tilt: '2deg' },
+  { src: photo11, title: 'Sorry Note', note: 'Sorry is liye ki mai apne bhalu ko direct phone nhi krta. Meri bhalu padh rhi hogi is liye use disturb naa hoo.', size: 'tall', tilt: '5deg' },
+  { src: photo12, title: 'Unique Pose', note: 'Diwali me jo hmne new pose try kre the ye vo hai. Kya pta dubara kb mauka mile 🥺', size: 'wide', tilt: '-3deg' },
+  { src: photo13, title: 'Unique Pose 2', note: 'Time time se apni cutee si photo bhejte rehna aur gg ki bhi ', size: 'square', tilt: '4deg' },
+  { src: photo14, title: 'Priceless Diamond', note: 'One of the favouriate recreation moments.', size: 'tall', tilt: '-2deg' },
 ]
 
 /* ══════════════════════════════════════════════
@@ -709,7 +709,7 @@ export default function BirthdayPage() {
 
             <div className="hero-name-row">
               <span className="name-emoji">🌸</span>
-              <h2 className="hero-name">Bhalu ji</h2>
+              <h2 className="hero-name">Bhalu🐻❤️Ji</h2>
               <span className="name-emoji">🌸</span>
             </div>
 
@@ -799,9 +799,9 @@ export default function BirthdayPage() {
           <div className="memories-shell reveal">
             <div className="memories-header">
               <p className="section-tag">📸 Little Moments, Forever Kept 📸</p>
-              <h2 className="section-heading">A Gallery For Bhalu</h2>
+              <h2 className="section-heading">Bhalu ke liye ek khaas gallery. Jo mere liye bahut khas hai... </h2>
               <p className="section-sub">
-                Your beautiful memories deserve more than a plain grid, so they bloom here like treasured keepsakes.
+                "Tumhari yaadon ko sirf ek saadi si gallery mein band karna sahi nahi lagta, isliye yahan woh khilti hain — jaise koi bahut pyaara, bahut apna khaazana..." 💛
               </p>
             </div>
 
