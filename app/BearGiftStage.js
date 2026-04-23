@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo } from 'react'
+import GiftBoxParticles from './GiftBoxParticles'
 
 function BearArt() {
   return (
@@ -189,6 +190,8 @@ export default function BearGiftStage({ open, burstKey, onOpen }) {
 
   return (
     <section className="bear-gift-root">
+      <GiftBoxParticles heartScale={0.22} />
+
       {ambient.map((heart) => (
         <span
           key={heart.id}

@@ -1,7 +1,7 @@
 'use client'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import BearGiftStage from './BearGiftStage'
 
 const EnvelopePromise = dynamic(() => import('./EnvelopePromise'), { ssr: false })
@@ -111,6 +111,52 @@ function TinyFlower({ color = '#c060f0', size = 36 }) {
       ))}
       <circle cx="30" cy="30" r="9" fill="#ffd700" />
     </svg>
+  )
+}
+
+function AmbientFloatingHearts({ count = 12, zIndex = 1, fixed = false }) {
+  const hearts = useMemo(
+    () =>
+      Array.from({ length: count }, (_, index) => ({
+        id: index,
+        left: Math.random() * 100,
+        bottom: -10 - Math.random() * 10,
+        size: 14 + Math.random() * 22,
+        delay: Math.random() * 8,
+        duration: 7 + Math.random() * 6,
+        opacity: 0.35 + Math.random() * 0.35,
+      })),
+    [count]
+  )
+
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: fixed ? 'fixed' : 'absolute',
+        inset: 0,
+        overflow: 'hidden',
+        pointerEvents: 'none',
+        zIndex,
+      }}
+    >
+      {hearts.map((heart) => (
+        <span
+          key={heart.id}
+          className="bear-gift-ambient-heart"
+          style={{
+            left: `${heart.left}%`,
+            bottom: `${heart.bottom}%`,
+            fontSize: `${heart.size}px`,
+            animationDelay: `${heart.delay}s`,
+            animationDuration: `${heart.duration}s`,
+            opacity: heart.opacity,
+          }}
+        >
+          ♥
+        </span>
+      ))}
+    </div>
   )
 }
 
@@ -424,6 +470,7 @@ export default function BirthdayPage() {
       {/* ══ STAGE: PROMISE ══ */}
       {stage === 'promise' && (
         <section className={`promise-screen ${openingEnvelope ? 'opened' : ''} ${heartsActive ? 'shattering' : ''}`}>
+          <AmbientFloatingHearts />
           <HeartParticles />
           <div className="promise-stars" aria-hidden="true" />
           <div className="promise-aura promise-aura-left" aria-hidden="true" />
@@ -453,6 +500,7 @@ export default function BirthdayPage() {
       {/* ══ STAGE: CAKE ══ */}
       {stage === 'cake' && (
         <section className="cake-screen">
+          <AmbientFloatingHearts />
           <div className="cake-bg-aura cake-bg-aura-left" />
           <div className="cake-bg-aura cake-bg-aura-right" />
           <div className="cake-stars" aria-hidden="true" />
@@ -607,6 +655,7 @@ export default function BirthdayPage() {
       {/* Fixed sparkle layer — always visible */}
       <canvas ref={canvasRef} className="sparkle-canvas" />
       <div ref={petalsRef} className="petals-layer" />
+      {stage === 'website' && <AmbientFloatingHearts fixed zIndex={2} />}
 
       <main
         className="page-wrapper"
@@ -615,6 +664,7 @@ export default function BirthdayPage() {
 
         {/* ══════ HERO ══════ */}
         <section className="hero" id="top">
+          <AmbientFloatingHearts zIndex={2} />
 
           {/* Corner flowers */}
           {[
@@ -678,6 +728,7 @@ export default function BirthdayPage() {
 
         {/* ══════ GARDEN ══════ */}
         <section className="garden-section" id="garden">
+          <AmbientFloatingHearts zIndex={1} />
           <div className="garden-header reveal">
             <p className="section-tag">🌺 A Garden Blooming Just For You 🌺</p>
             <h2 className="section-heading">Your Flower Garden</h2>
@@ -714,6 +765,7 @@ export default function BirthdayPage() {
 
         {/* ══════ WISHES ══════ */}
         <section className="wishes-section" id="wishes">
+          <AmbientFloatingHearts zIndex={1} />
           <div className="wishes-header reveal">
             <p className="section-tag">💝 Birthday Blessings 💝</p>
             <h2 className="section-heading">Wishes From The Heart</h2>
@@ -741,6 +793,7 @@ export default function BirthdayPage() {
 
         {/* ══════ MEMORIES ══════ */}
         <section className="memories-section" id="memories">
+          <AmbientFloatingHearts zIndex={1} />
           <div className="memories-shell reveal">
             <div className="memories-header">
               <p className="section-tag">📸 Little Moments, Forever Kept 📸</p>
@@ -786,6 +839,7 @@ export default function BirthdayPage() {
 
         {/* ══════ LETTER ══════ */}
         <section className="letter-section" id="letter">
+          <AmbientFloatingHearts zIndex={1} />
           <div className="letter-outer reveal">
             {/* Top flower row */}
             <div className="letter-flowers-row">
@@ -858,6 +912,7 @@ export default function BirthdayPage() {
 
         {/* ══════ CELEBRATION ══════ */}
         <section className="celebration-section" id="celebrate">
+          <AmbientFloatingHearts zIndex={1} />
 
           {/* Orbiting flowers ring */}
           <div className="celebration-orbit reveal">
