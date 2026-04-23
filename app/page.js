@@ -2,10 +2,10 @@
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
+import BearGiftStage from './BearGiftStage'
 
 const EnvelopePromise = dynamic(() => import('./EnvelopePromise'), { ssr: false })
 const HeartParticles = dynamic(() => import('./HeartParticles'), { ssr: false })
-const GiftBoxParticles = dynamic(() => import('./GiftBoxParticles'), { ssr: false })
 import photo1 from '../Images/1775886681934.png'
 import photo2 from '../Images/1775886682054.png'
 import photo3 from '../Images/1775886682123.png'
@@ -179,7 +179,7 @@ const PHOTO_MEMORIES = [
   { src: photo11, title: 'Sorry Note', note: 'Sorry is liye ki mai apne bhalu ko direct phone nhi krta. Meri bhalu padh rhi hogi is liye use disturb naa hoo.', size: 'tall', tilt: '5deg' },
   { src: photo12, title: 'Unique Pose', note: 'Diwali me jo hmne new pose try kre the ye vo hai. Kya pta dubara kb mauka mile 🥺', size: 'wide', tilt: '-3deg' },
   { src: photo13, title: 'Unique Pose 2', note: 'Time time se apni cutee si photo bhejte rehna aur gg ki bhi ', size: 'square', tilt: '4deg' },
-  { src: photo14, title: 'Priceless Diamond', note: 'One of the favouriate recreation moments.', size: 'tall', tilt: '-2deg' },
+  { src: photo14, title: 'Priceless Diamond', note: 'One of the favouriate recreation moment.', size: 'tall', tilt: '-2deg' },
 ]
 
 /* ══════════════════════════════════════════════
@@ -199,6 +199,7 @@ export default function BirthdayPage() {
   const [heartPieces, setHeartPieces] = useState([])
   const [candleBlown, setCandleBlown] = useState(false)
   const [giftOpening, setGiftOpening] = useState(false)
+  const [giftBurstKey, setGiftBurstKey] = useState(0)
 
   /* ── Canvas sparkles ── */
   useEffect(() => {
@@ -395,8 +396,9 @@ export default function BirthdayPage() {
   const handleGiftOpen = () => {
     if (giftOpening) return
     setGiftOpening(true)
-    // After box-open animation, show website
-    setTimeout(() => setStage('website'), 2000)
+    setGiftBurstKey((value) => value + 1)
+    // Keep Bhalu's original destination after the gift opens.
+    setTimeout(() => setStage('website'), 2600)
   }
 
   const confetti = Array.from({ length: 26 }, (_, i) => {
@@ -595,68 +597,11 @@ export default function BirthdayPage() {
 
       {/* ══ STAGE: GIFT BOX ══ */}
       {stage === 'gift' && (
-        <section className="gift-screen">
-          <div className="gift-bg-aura gift-bg-left" />
-          <div className="gift-bg-aura gift-bg-right" />
-          <GiftBoxParticles heartScale={0.22} />
-
-          {/* Floating sparkles around box */}
-          <div className="gift-sparkles" aria-hidden="true">
-            {Array.from({length:12},(_,i)=>(
-              <div key={i} className="gs" style={{'--gsi':i,'--gsx':`${Math.cos((i/12)*Math.PI*2)*160}px`,'--gsy':`${Math.sin((i/12)*Math.PI*2)*100}px`}} />
-            ))}
-          </div>
-
-          <div className="gift-stage-hero">
-            <div className="gift-header reveal-instant">
-              <p className="gift-eyebrow">🎁 Ek Khaas Tohfa 🎁</p>
-              <h2 className="gift-title">Kholo Ise!</h2>
-              <p className="gift-sub">❤️Special gift for special person❤️</p>
-            </div>
-
-            <div className="gift-box-stage">
-              <button
-                className={`gift-box-btn ${giftOpening ? 'opening' : ''}`}
-                onClick={handleGiftOpen}
-                aria-label="Open gift box"
-              >
-                {/* 3D Gift Box */}
-                <div className="gbox-scene">
-                  {/* Lid */}
-                  <div className={`gbox-lid ${giftOpening ? 'gbox-lid-open' : ''}`}>
-                    <div className="gbox-lid-top" />
-                    <div className="gbox-lid-front" />
-                    <div className="gbox-lid-side" />
-                    <div className="gbox-bow">
-                      <div className="bow-loop bow-left" />
-                      <div className="bow-loop bow-right" />
-                      <div className="bow-knot" />
-                      <div className="bow-tail bow-tail-l" />
-                      <div className="bow-tail bow-tail-r" />
-                    </div>
-                  </div>
-                  {/* Box body */}
-                  <div className="gbox-body">
-                    <div className="gbox-front">
-                      <div className="gbox-ribbon-h" />
-                      <div className="gbox-ribbon-v" />
-                      {giftOpening && (
-                        <div className="gift-burst" aria-hidden="true">
-                          {['✨','💖','🌸','⭐','💕','🌟','🎀','💫'].map((e,i)=>(
-                            <span key={i} className="burst-piece" style={{'--bi':i}}>{e}</span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                    <div className="gbox-side" />
-                    <div className="gbox-bottom" />
-                  </div>
-                </div>
-                {!giftOpening && <p className="gift-tap-hint">Tap to open 🎀</p>}
-              </button>
-            </div>
-          </div>
-        </section>
+        <BearGiftStage
+          open={giftOpening}
+          burstKey={giftBurstKey}
+          onOpen={handleGiftOpen}
+        />
       )}
 
       {/* Fixed sparkle layer — always visible */}
