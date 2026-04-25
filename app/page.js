@@ -3,6 +3,8 @@ import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import BearGiftStage from './BearGiftStage'
+import PrincessCakeScene from './PrincessCakeScene'
+import { CAKE_SPARKLES } from './cakeSparkles'
 
 const EnvelopePromise = dynamic(() => import('./EnvelopePromise'), { ssr: false })
 const HeartParticles = dynamic(() => import('./HeartParticles'), { ssr: false })
@@ -501,144 +503,46 @@ export default function BirthdayPage() {
       {stage === 'cake' && (
         <section className="cake-screen">
           <AmbientFloatingHearts />
-          <div className="cake-bg-aura cake-bg-aura-left" />
-          <div className="cake-bg-aura cake-bg-aura-right" />
-          <div className="cake-stars" aria-hidden="true" />
-
-          <div className="cake-header  ">
-            <p className="cake-eyebrow">✨ Your 19th Birthday ✨</p>
-            <h2 className="cake-title">Make a Wish!</h2>
-            <p className="cake-sub">Phoonk maar ke apni wish maango 🌟</p>
+          <div className="cake-stars" aria-hidden="true">
+            {CAKE_SPARKLES.map((sparkle) => (
+              <span
+                key={`${sparkle.left}-${sparkle.top}`}
+                className="cake-star"
+                style={{
+                  left: `${sparkle.left}%`,
+                  top: `${sparkle.top}%`,
+                  width: `${sparkle.size}px`,
+                  height: `${sparkle.size}px`,
+                  animationDelay: `${sparkle.delay}s`,
+                }}
+              />
+            ))}
           </div>
 
           <HeartParticles heartScale={0.20} />
 
-          {/* ── 3D Princess Cake ── */}
-          <div className="cake-scene-wrap" >
-            <div className={`cake-scene ${candleBlown ? 'cake-blown' : ''}`}>
-
-              {/* ── Candle group + Crown — sits above ct-3 ── */}
-              <div className="candle-group">
-                <div className="cake-crown-top">
-                  <div className="crown-jewel" />
-                  <div className="crown-svg-wrap">👑</div>
-                </div>
-                <div className="candle-row">
-                  {/* Left small candle */}
-                  <div className="candle candle-s candle-left">
-                    {!candleBlown && <div className="flame flame-s"><div className="flame-inner" /></div>}
-                    {candleBlown && <div className="smoke smoke-s" />}
-                    <div className="wick" />
-                    <div className="candle-body cb-pink">
-                      <div className="candle-stripe" />
-                    </div>
-                  </div>
-
-                  {/* Centre big candle */}
-                  <div className="candle candle-m candle-center">
-                    {!candleBlown && <div className="flame flame-m"><div className="flame-inner" /></div>}
-                    {candleBlown && <div className="smoke smoke-m" />}
-                    <div className="wick" />
-                    <div className="candle-body cb-gold">
-                      <div className="candle-stripe" />
-                      <div className="candle-num">19</div>
-                    </div>
-                  </div>
-
-                  {/* Right small candle */}
-                  <div className="candle candle-s candle-right">
-                    {!candleBlown && <div className="flame flame-s"><div className="flame-inner" /></div>}
-                    {candleBlown && <div className="smoke smoke-s" />}
-                    <div className="wick" />
-                    <div className="candle-body cb-lavender">
-                      <div className="candle-stripe" />
-                    </div>
-                  </div>
-                </div>
-
-              </div>{/* end candle-group */}
-
-              {/* Tier 1 — top, smallest */}
-              <div className="cake-tier ct-3">
-                <div className="ct-top">
-                  <div className="ct-top-inner" />
-                </div>
-                <div className="ct-body">
-                  <div className="ct-frosting-drips">
-                    {Array.from({length:5},(_,i)=>(
-                      <div key={i} className="drip" style={{'--di':i,'--dh':`${Math.random()*12+6}px`}} />
-                    ))}
-                  </div>
-                  <div className="ct-heart-decos">
-                    {['💕','🌸','💕'].map((d,i)=>(
-                      <span key={i} className="ct-deco" style={{'--deco-i':i}}>{d}</span>
-                    ))}
-                  </div>
-                </div>
-                <div className="ct-depth" />
-              </div>{/* end ct-3 */}
-
-              {/* Tier 2 — middle */}
-              <div className="cake-tier ct-2">
-                <div className="ct-top">
-                  <div className="ct-top-inner" />
-                </div>
-                <div className="ct-body">
-                  <div className="ct-frosting-drips">
-                    {Array.from({length:7},(_,i)=>(
-                      <div key={i} className="drip" style={{'--di':i,'--dh':`${Math.random()*14+8}px`}} />
-                    ))}
-                  </div>
-                  <div className="ct-decos">
-                    {['💜','⭐','💜','⭐','💜'].map((d,i)=>(
-                      <span key={i} className="ct-deco" style={{'--deco-i':i}}>{d}</span>
-                    ))}
-                  </div>
-                </div>
-                <div className="ct-depth" />
-              </div>{/* end ct-2 */}
-
-              {/* Tier 3 — bottom, biggest */}
-              <div className="cake-tier ct-1">
-                <div className="ct-top">
-                  <div className="ct-top-inner" />
-                </div>
-                <div className="ct-body">
-                  <div className="ct-frosting-drips">
-                    {Array.from({length:9},(_,i)=>(
-                      <div key={i} className="drip" style={{'--di':i,'--dh':`${Math.random()*18+10}px`}} />
-                    ))}
-                  </div>
-                  <div className="ct-decos">
-                    {['🌹','✨','🌸','💫','🌹','✨','🌸'].map((d,i)=>(
-                      <span key={i} className="ct-deco" style={{'--deco-i':i}}>{d}</span>
-                    ))}
-                  </div>
-                  <div className="ct-ribbon ct-ribbon-h" />
-                  <div className="ct-ribbon ct-ribbon-v" />
-                </div>
-                <div className="ct-depth" />
-              </div>{/* end ct-1 */}
-
-            </div>{/* end cake-scene */}
-
-            {/* Plate / board */}
-            <div className="cake-plate" />
-
-          </div>{/* end cake-scene-wrap */}
-
-          {/* Blow button or wish message */}
-          {!candleBlown ? (
-            <button className="blow-btn" onClick={handleBlow}>
-              {/* <span className="blow-icon">💨</span> */}
-              <span>Phoonk Maro 🥰!</span>
-            </button>
-          ) : (
-            <div className="wish-granted">
-              <p className="wish-granted-text">🌟 Meri bhalu🐻❤️ ki wish zaroor poori hogi! 🌟</p>
-              <p className="wish-granted-sub">Ek special gift hai tumhare liye…</p>
+          <div className="cake-stage-shell">
+            <div className="cake-header">
+              <p className="cake-eyebrow">✨ Your 19th Birthday ✨</p>
+              <h2 className="cake-title">Make a Wish!</h2>
+              <p className="cake-sub">Phoonk maar ke apni wish maango 🌟</p>
             </div>
-          )}
+
+            <div className="cake-scene-wrap">
+              <PrincessCakeScene candleBlown={candleBlown} name="Bhalu" />
+            </div>
+
+            {!candleBlown ? (
+              <button className="blow-btn" onClick={handleBlow}>
+                <span>Phoonk Maro 🥰!</span>
+              </button>
+            ) : (
+              <div className="wish-granted">
+                <p className="wish-granted-text">🌟 Meri bhalu🐻❤️ ki wish zaroor poori hogi! 🌟</p>
+                <p className="wish-granted-sub">Ek special gift hai tumhare liye…</p>
+              </div>
+            )}
+          </div>
 
         </section>
       )}
